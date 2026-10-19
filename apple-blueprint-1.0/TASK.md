@@ -22,6 +22,7 @@ apple-blueprint-1.0/
 ├── index.html                 # Semantic HTML5 shell with accessibility attributes
 ├── README.md                  # Newcomer-friendly introduction & deployment guide
 ├── TASK.md                    # <-- Comprehensive status tracker & AI engineering log
+├── APPLE_WEB_ARCHITECTURE.md  # Deep dive: How Apple delivers web pages (Vanilla/Canvas/Edge)
 ├── css/
 │   └── styles.css             # Liquid Glass optics, responsive layout, canvas bounds
 ├── js/

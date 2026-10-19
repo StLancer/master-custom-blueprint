@@ -36,6 +36,7 @@ The entire website is controlled by **one configuration file**:
 👉 **[`js/config.js`](js/config.js)** — *the single source of truth for all text, copy, links, theme colors, and product specs.*
 
 Specific directories also include specialized guides:
+- **How Apple Builds Webpages (Engineering Philosophy):** [`APPLE_WEB_ARCHITECTURE.md`](APPLE_WEB_ARCHITECTURE.md)
 - **Logo Guide:** [`assets/logo/TOKnow.md`](assets/logo/TOKnow.md)
 - **3D Product Images Guide:** [`assets/disassembly/layers/Note.md`](assets/disassembly/layers/Note.md)
 - **3D Showcase Architecture:** [`assets/disassembly/README.md`](assets/disassembly/README.md)
