@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Apple Blueprint 1.0 — Frontier Open-Source Landing Page Template</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./css/styles.css" />
+  <!-- Tab icon. Served from the SAME ./assets/logo/ asset as the hero centerpiece
+       and the navbar brand mark. js/logo-pipeline.js re-points this link at whatever
+       file the pipeline resolves, so dropping in a new logo updates the tab icon too. -->
+  <link rel="icon" id="blueprintFavicon" type="image/svg+xml" sizes="any" href="./assets/logo/center-logo.svg" />
+</head>
+<body>
+
+  <!-- ========================================================================
+       1. PERSISTENT iOS LIQUID GLASS NAVBAR / APP BAR
+       ======================================================================== -->
+  <header class="liquid-navbar" id="topNavbar">
+    <div class="nav-inner">
+      <a href="#hero" class="nav-brand" id="navBrand">
+        <!-- Apple Logo SVG (Default) or custom image from config.js -->
+        <svg class="apple-nav-icon" viewBox="0 0 170 170" fill="currentColor" aria-hidden="true">
+          <path d="M150.37 130.25c-2.45 5.66-5.35 10.87-8.71 15.66-4.58 6.53-8.33 11.05-11.22 13.56-4.48 4.12-9.28 6.23-14.42 6.35-3.69 0-8.14-1.05-13.32-3.18-5.19-2.12-9.97-3.17-14.34-3.17-4.58 0-9.49 1.05-14.75 3.17-5.26 2.13-9.5 3.24-12.74 3.35-4.35.13-9.13-1.9-14.34-6.08-3.69-3.03-7.61-7.82-11.77-14.37-6.16-9.64-11.17-20.71-15.02-33.21-3.86-12.51-5.78-23.95-5.78-34.34 0-12.83 3.19-23.22 9.56-31.15 6.38-7.93 14.32-12.01 23.82-12.23 4.69 0 9.89 1.38 15.6 4.12 5.7 2.75 9.39 4.19 11.07 4.31 1.23 0 5.15-1.62 11.75-4.86 6.6-3.24 12.19-4.63 16.77-4.19 12.41 1.01 21.75 5.87 28.01 14.59-11.07 6.71-16.49 16.1-16.27 28.17.22 9.39 3.69 17.22 10.4 23.48 4.81 4.47 10.51 7.27 17.11 8.39-1.38 4.35-2.99 8.83-4.82 13.45zM119.22 31.04c0 7.39-2.7 14.28-8.1 20.66-6.51 7.61-14.39 12.01-22.94 11.33-.11-.89-.17-1.84-.17-2.85 0-7.15 2.99-14.78 8.39-20.99 2.68-3.08 6.09-5.64 10.23-7.68 4.14-2.04 8.05-3.16 11.74-3.36.56 1.01.85 1.98.85 2.89z"/>
+        </svg>
+        <span class="nav-brand-title" id="navBrandTitle">Apple Blueprint 1.0</span>
+      </a>
+
+      <ul class="nav-links" id="navLinksList"></ul>
+
+      <div class="nav-actions">
+        <button class="liquid-account-btn" id="accountBtn" type="button">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+          <span class="account-status-dot" id="accountStatusDot" hidden></span>
+          <span id="accountBtnLabel">Account</span>
+        </button>
+
+        <!-- Mobile Menu Toggle Button (Visible on screens <= 900px) -->
+        <button class="liquid-mobile-menu-btn" id="mobileMenuBtn" type="button" aria-label="Toggle navigation menu" aria-expanded="false">
+          <span class="hamburger-bar"></span>
+          <span class="hamburger-bar"></span>
+          <span class="hamburger-bar"></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Liquid Glass Collapsible Navigation Drawer -->
+    <nav class="mobile-nav-dropdown" id="mobileNavDropdown" aria-label="Mobile Navigation" hidden>
+      <ul class="mobile-nav-list" id="mobileNavLinksList"></ul>
+    </nav>
+  </header>
+
+  <!-- ========================================================================
+       1B. AUTHENTIC ACCOUNT PORTAL + OAUTH POP-OUT CHOOSER + WELCOME EMAIL
+       ======================================================================== -->
+  <div class="account-modal-backdrop" id="accountModal" hidden>
+    <div class="account-modal-glass">
+      <div class="account-modal-header">
+        <div>
+          <span class="modal-eyebrow" id="accountModalEyebrow">APPLE ACCOUNT</span>
+          <h4 id="accountModalTitle">Log in to continue</h4>
+        </div>
+        <button class="modal-close-btn" id="closeAccountModal" type="button" aria-label="Close Account Modal">✕</button>
+      </div>
+
+      <!-- PANE 1: Entry Auth View (Email/ID -> Continue -> or -> Google / Facebook / Apple / SSO -> Sign up) -->
+      <div class="account-pane" id="accountAuthPane">
+        <form id="accountUnifiedForm" class="auth-ref-form">
+          <div id="signupExtraFields" hidden>
+            <label class="auth-ref-label" for="signupNameInput">Full Name</label>
+            <input type="text" id="signupNameInput" placeholder="Enter your full name" class="auth-ref-input" autocomplete="name" />
+          </div>
+
+          <label class="auth-ref-label" for="signinEmailInput" id="authIdentifierLabel">Email or Account ID</label>
+          <input
+            type="text"
+            id="signinEmailInput"
+            placeholder="name@gmail.com or Account ID"
+            class="auth-ref-input"
+            autocomplete="username"
+            required
+          />
+
+          <div class="account-status-msg" id="accountAuthFeedback" hidden></div>
+
+          <button type="submit" class="auth-continue-btn" id="authContinueBtn">Continue</button>
+        </form>
+
+        <div class="auth-or-divider"><span>or</span></div>
+
+        <!-- OAuth Provider Pill Buttons (Each opens an authentic Pop-Out Account Chooser Window) -->
+        <div class="auth-oauth-stack">
+          <button type="button" class="auth-oauth-btn" data-oauth-provider="Google">
+            <span class="auth-oauth-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="20" height="20">
+                <path fill="#EA4335" d="M12 10.2v3.9h5.5c-.24 1.26-.96 2.33-2.04 3.05l3.3 2.56c1.92-1.77 3.04-4.38 3.04-7.46 0-.72-.06-1.41-.19-2.05H12z"/>
+                <path fill="#34A853" d="M12 22c2.75 0 5.06-.91 6.75-2.47l-3.3-2.56c-.91.61-2.08.98-3.45.98-2.65 0-4.9-1.79-5.71-4.2H2.88v2.64A9.99 9.99 0 0 0 12 22z"/>
+                <path fill="#FBBC05" d="M6.29 13.75A6.02 6.02 0 0 1 5.97 12c0-.61.11-1.2.32-1.75V7.61H2.88A9.99 9.99 0 0 0 2 12c0 1.61.39 3.14 1.08 4.39l3.21-2.64z"/>
+                <path fill="#4285F4" d="M12 6.05c1.5 0 2.84.52 3.9 1.53l2.92-2.92C17.05 3.01 14.75 2 12 2A9.99 9.99 0 0 0 2.88 7.61l3.41 2.64c.81-2.41 3.06-4.2 5.71-4.2z"/>
+              </svg>
+            </span>
+            <span class="auth-oauth-label">Continue with Google</span>
+          </button>
+
+          <button type="button" class="auth-oauth-btn" data-oauth-provider="Facebook">
+            <span class="auth-oauth-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="20" height="20">
+                <circle cx="12" cy="12" r="10" fill="#1877F2"/>
+                <path fill="#ffffff" d="M15.12 15.5l.44-2.88h-2.76v-1.87c0-.79.39-1.56 1.63-1.56h1.26V6.74s-1.14-.2-2.24-.2c-2.28 0-3.77 1.38-3.77 3.89v2.19H7.14v2.88h2.54V22a10.1 10.1 0 0 0 3.12 0v-6.5h2.32z"/>
+              </svg>
+            </span>
+            <span class="auth-oauth-label">Continue with Facebook</span>
+          </button>
+
+          <button type="button" class="auth-oauth-btn" data-oauth-provider="Apple">
+            <span class="auth-oauth-icon" aria-hidden="true">
+              <svg viewBox="0 0 170 170" width="20" height="20" fill="#ffffff">
+                <path d="M150.37 130.25c-2.45 5.66-5.35 10.87-8.71 15.66-4.58 6.53-8.33 11.05-11.22 13.56-4.48 4.12-9.28 6.23-14.42 6.35-3.69 0-8.14-1.05-13.32-3.18-5.19-2.12-9.97-3.17-14.34-3.17-4.58 0-9.49 1.05-14.75 3.17-5.26 2.13-9.5 3.24-12.74 3.35-4.35.13-9.13-1.9-14.34-6.08-3.69-3.03-7.61-7.82-11.77-14.37-6.16-9.64-11.17-20.71-15.02-33.21-3.86-12.51-5.78-23.95-5.78-34.34 0-12.83 3.19-23.22 9.56-31.15 6.38-7.93 14.32-12.01 23.82-12.23 4.69 0 9.89 1.38 15.6 4.12 5.7 2.75 9.39 4.19 11.07 4.31 1.23 0 5.15-1.62 11.75-4.86 6.6-3.24 12.19-4.63 16.77-4.19 12.41 1.01 21.75 5.87 28.01 14.59-11.07 6.71-16.49 16.1-16.27 28.17.22 9.39 3.69 17.22 10.4 23.48 4.81 4.47 10.51 7.27 17.11 8.39-1.38 4.35-2.99 8.83-4.82 13.45zM119.22 31.04c0 7.39-2.7 14.28-8.1 20.66-6.51 7.61-14.39 12.01-22.94 11.33-.11-.89-.17-1.84-.17-2.85 0-7.15 2.99-14.78 8.39-20.99 2.68-3.08 6.09-5.64 10.23-7.68 4.14-2.04 8.05-3.16 11.74-3.36.56 1.01.85 1.98.85 2.89z"/>
+              </svg>
+            </span>
+            <span class="auth-oauth-label">Continue with Apple</span>
+          </button>
+
+          <button type="button" class="auth-oauth-btn" data-oauth-provider="SSO">
+            <span class="auth-oauth-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="#60c5ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="7.5" cy="15.5" r="5.5"/>
+                <path d="m21 2-9.6 9.6"/>
+                <path d="m15.5 7.5 3 3L22 7l-3-3"/>
+              </svg>
+            </span>
+            <span class="auth-oauth-label">Continue with Account ID / SSO</span>
+          </button>
+        </div>
+
+        <div class="auth-bottom-switch">
+          <p id="authSwitchPrompt">Don't have an account?</p>
+          <button type="button" class="auth-switch-link" id="toggleAuthModeBtn">Sign up</button>
+        </div>
+      </div>
+
+      <!-- PANE 2: 2-Step Verification & Password Step for Email / Account ID Pathway -->
+      <div class="account-pane" id="accountVerifyPane" hidden>
+        <div class="verify-identity-pill">
+          <span id="verifyIdentityEmail">name@gmail.com</span>
+          <button type="button" class="verify-change-btn" id="verifyChangeEmailBtn">Change</button>
+        </div>
+
+        <form id="accountVerifyForm" class="auth-ref-form">
+          <label class="auth-ref-label" for="verifyPasswordInput" id="verifyPasswordLabel">Password</label>
+          <input
+            type="password"
+            id="verifyPasswordInput"
+            placeholder="Enter your password"
+            class="auth-ref-input"
+            autocomplete="current-password"
+            required
+          />
+
+          <div class="verify-otp-block" id="verifyOtpBlock">
+            <div class="verify-otp-header">
+              <label class="auth-ref-label" for="verifyOtpInput" style="margin-bottom:0;">6-Digit Verification Code</label>
+              <button type="button" class="verify-resend-link" id="resendOtpBtn">Resend code</button>
+            </div>
+            <p class="verify-otp-hint" id="verifyOtpHint">
+              We sent a 6-digit security code to your email address.
+            </p>
+            <input
+              type="text"
+              id="verifyOtpInput"
+              placeholder="••••••"
+              maxlength="6"
+              inputmode="numeric"
+              class="auth-ref-input otp-code-input"
+              required
+            />
+          </div>
+
+          <div class="account-status-msg" id="verifyStepFeedback" hidden></div>
+
+          <button type="submit" class="auth-continue-btn" id="verifySubmitBtn">Verify &amp; Continue</button>
+        </form>
+      </div>
+
+      <!-- PANE 3: Authentic Signed-In User Account Profile -->
+      <div class="account-pane" id="accountProfilePane" hidden>
+        <div class="account-profile-card">
+          <div class="account-avatar" id="accountAvatarInitials">AP</div>
+          <div class="account-profile-info">
+            <div class="account-name-row">
+              <h5 id="accountProfileName">Apple Member</h5>
+              <span class="account-verified-pill">✓ Verified</span>
+            </div>
+            <p id="accountProfileEmail">member@gmail.com</p>
+            <span class="account-role-badge" id="accountProfileRole">Signed in with Google</span>
+          </div>
+        </div>
+
+        <div class="account-details-list">
+          <div class="account-detail-row">
+            <span class="detail-label">Account ID</span>
+            <span class="detail-val" id="accountProfileId">APL-849201</span>
+          </div>
+          <div class="account-detail-row">
+            <span class="detail-label">Security</span>
+            <span class="detail-val">OAuth 2.0 / 2FA Verified</span>
+          </div>
+          <div class="account-detail-row">
+            <span class="detail-label">Welcome Email</span>
+            <button type="button" class="detail-link-btn" id="openWelcomeEmailFromProfileBtn">Delivered • View Email ↗</button>
+          </div>
+        </div>
+
+        <div class="account-profile-actions">
+          <button type="button" class="liquid-btn full-width" id="switchAccountBtn">Switch Account</button>
+          <button type="button" class="liquid-btn danger-outline full-width" id="signOutBtn">Sign Out</button>
+        </div>
+      </div>
+
+      <!-- PANE 4: Full Welcome Email Reader View -->
+      <div class="account-pane" id="accountEmailViewerPane" hidden>
+        <div class="email-viewer-card">
+          <div class="email-viewer-meta">
+            <div class="email-meta-row"><strong>From:</strong> <span>Apple Account Team &lt;no-reply@account.apple.com&gt;</span></div>
+            <div class="email-meta-row"><strong>To:</strong> <span id="welcomeEmailToAddr">user@gmail.com</span></div>
+            <div class="email-meta-row"><strong>Subject:</strong> <span>Welcome to Apple — Your Account is Ready</span></div>
+            <div class="email-meta-row"><strong>Date:</strong> <span id="welcomeEmailTimestamp">Just now</span></div>
+          </div>
+          <div class="email-viewer-body">
+            <h5 id="welcomeEmailGreeting">Hi Alex, welcome to Apple.</h5>
+            <p>
+              Thank you for signing up and verifying your account. Your Apple ID (<strong id="welcomeEmailInlineAddr">user@gmail.com</strong>) is now active across our autonomous robotics, iPhone Pro hardware, and AI compute ecosystem.
+            </p>
+            <div class="email-summary-box">
+              <div><span>Account ID:</span> <strong id="welcomeEmailAcctId">APL-849201</strong></div>
+              <div><span>Sign-In Method:</span> <strong id="welcomeEmailProvider">Google OAuth 2.0</strong></div>
+              <div><span>Verification Status:</span> <strong style="color:#34d399;">✓ Verified</strong></div>
+            </div>
+            <p class="email-footer-note">
+              If you did not initiate this request, you can manage your security settings at any time from your account icon in the navigation bar.
+            </p>
+          </div>
+        </div>
+        <div class="account-profile-actions" style="margin-top: 14px;">
+          <button type="button" class="auth-continue-btn" id="backToProfileFromEmailBtn">Done</button>
+          <button type="button" class="liquid-btn full-width" id="sendRealMailtoBtn">Open in Default Mail App ✉</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       1B-2. POP-OUT OAUTH ACCOUNT CHOOSER WINDOW (Google / Apple / Facebook / SSO)
+       ======================================================================== -->
+  <div class="oauth-popup-backdrop" id="oauthPopupBackdrop" hidden>
+    <div class="oauth-popup-window" role="dialog" aria-labelledby="oauthPopupTitle">
+      <!-- Realistic Browser Pop-Out Window Titlebar + URL Bar -->
+      <div class="oauth-window-titlebar">
+        <div class="oauth-window-dots">
+          <span class="dot close" id="closeOauthPopupDot"></span>
+          <span class="dot min"></span>
+          <span class="dot max"></span>
+        </div>
+        <div class="oauth-window-urlbar">
+          <span class="lock-icon">🔒</span>
+          <span id="oauthWindowUrl">https://accounts.google.com/o/oauth2/v2/auth</span>
+        </div>
+        <button type="button" class="oauth-window-close" id="closeOauthPopupBtn" aria-label="Close OAuth Window">✕</button>
+      </div>
+
+      <!-- Provider Brand Header -->
+      <div class="oauth-popup-body">
+        <div class="oauth-brand-header">
+          <div class="oauth-brand-logo" id="oauthBrandLogo"></div>
+          <span class="oauth-brand-sub" id="oauthBrandSub">Sign in with Google</span>
+          <h4 class="oauth-popup-title" id="oauthPopupTitle">Choose an account</h4>
+          <p class="oauth-popup-subtitle">to continue to <strong>Apple</strong></p>
+        </div>
+
+        <!-- STEP 1: Account Chooser List -->
+        <div id="oauthAccountListStep">
+          <div class="oauth-account-list" id="oauthAccountList"></div>
+
+          <button type="button" class="oauth-another-account-btn" id="oauthUseAnotherBtn">
+            <span class="oauth-another-icon">+</span>
+            <span>Use another account</span>
+          </button>
+        </div>
+
+        <!-- STEP 2: "Use Another Account" Custom Email & Name Form -->
+        <form id="oauthCustomAccountForm" class="oauth-custom-form" hidden>
+          <label class="oauth-field-label" for="oauthCustomNameInput">Your Name</label>
+          <input type="text" id="oauthCustomNameInput" class="oauth-field-input" placeholder="e.g. Tan Jia Zhi" required />
+
+          <label class="oauth-field-label" for="oauthCustomEmailInput" id="oauthCustomEmailLabel">Email or phone</label>
+          <input type="email" id="oauthCustomEmailInput" class="oauth-field-input" placeholder="yourname@gmail.com" required />
+
+          <label class="oauth-field-label" for="oauthCustomPasswordInput">Password</label>
+          <input type="password" id="oauthCustomPasswordInput" class="oauth-field-input" placeholder="Enter your password" required />
+
+          <div class="oauth-custom-actions">
+            <button type="button" class="oauth-secondary-btn" id="oauthBackToListBtn">← Back</button>
+            <button type="submit" class="oauth-primary-btn" id="oauthCustomSubmitBtn">Next</button>
+          </div>
+        </form>
+
+        <!-- STEP 3: OAuth Consent & Handshake Confirmation -->
+        <div id="oauthConsentStep" class="oauth-consent-step" hidden>
+          <div class="oauth-selected-pill" id="oauthConsentAccountPill"></div>
+          <p class="oauth-consent-text" id="oauthConsentCopy">
+            To continue, Google will share your name, email address, language preference, and profile picture with <strong>Apple</strong>.
+          </p>
+          <div class="oauth-custom-actions">
+            <button type="button" class="oauth-secondary-btn" id="oauthCancelConsentBtn">Cancel</button>
+            <button type="button" class="oauth-primary-btn" id="oauthConfirmConsentBtn">Continue</button>
+          </div>
+        </div>
+
+        <p class="oauth-privacy-note">
+          Before using this app, you can review Apple’s Privacy Policy and Terms of Service.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       1B-3. INCOMING WELCOME / VERIFICATION EMAIL NOTIFICATION TOAST
+       ======================================================================== -->
+  <div class="email-toast-banner" id="emailNotificationToast" hidden>
+    <div class="email-toast-icon">✉️</div>
+    <div class="email-toast-content">
+      <div class="email-toast-top">
+        <strong id="emailToastTitle">Welcome Email Sent</strong>
+        <span class="email-toast-time">now</span>
+      </div>
+      <p id="emailToastSummary">To: user@gmail.com — Welcome to Apple! Your account is verified.</p>
+      <div class="email-toast-actions">
+        <button type="button" class="email-toast-btn primary" id="emailToastActionBtn">Read Welcome Email</button>
+        <button type="button" class="email-toast-btn" id="emailToastDismissBtn">Dismiss</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       1C. INTERACTIVE TECH SPECS COMPARISON MODAL / DRAWER
+       ======================================================================== -->
+  <div class="specs-modal-backdrop" id="techSpecsModal" hidden>
+    <div class="specs-modal-glass">
+      <div class="specs-modal-header">
+        <div>
+          <span class="modal-eyebrow" id="specsModalEyebrow">TECHNICAL SPECIFICATIONS</span>
+          <h3 class="specs-modal-title" id="specsModalTitle">Architecture &amp; Model Comparison</h3>
+        </div>
+        <button class="modal-close-btn" id="closeTechSpecsModal" type="button" aria-label="Close Specifications Modal">✕</button>
+      </div>
+
+      <!-- Category Selector Tabs (Robotics / iPhone 18 Pro / NVIDIA Compute) -->
+      <div class="specs-category-tabs" id="specsCategoryTabs" role="tablist"></div>
+
+      <!-- Dynamic Side-by-Side Comparison Content -->
+      <div class="specs-comparison-body" id="specsComparisonBody"></div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       2. HERO SECTION: AURORA SAPPHIRE + BREAK/RELINK PARTICLES + 3D GLASS LOGO
+       ======================================================================== -->
+  <section class="hero-stage" id="hero">
+    <!-- Layer 1: Aurora Deep Cosmic Sapphire + Low-Res Reactive Constellation Canvas -->
+    <canvas id="auroraConstellationCanvas"></canvas>
+
+    <!-- Layer 2: 3D Refractive Glassmorphic Center Logo Canvas (Apple Logo Default) -->
+    <canvas id="glassLogoCanvas"></canvas>
+
+    <!-- Layer 3: Foreground Typography (Centered with 3D Logo) & Bottom Liquid Glass CTAs -->
+    <div class="hero-content-wrap">
+      <span class="hero-eyebrow" id="heroEyebrow"></span>
+      <h1 class="hero-title" id="heroTitle"></h1>
+      <p class="hero-subtitle" id="heroSubtitle"></p>
+    </div>
+
+    <div class="hero-cta-bar" id="heroCtaBar"></div>
+  </section>
+
+  <!-- ========================================================================
+       3. POST-HERO MODULAR BENTO GRID (Blank Image Slots + Auto-Descriptions)
+       ======================================================================== -->
+  <section class="bento-showcase-section" id="bento-grid">
+    <div class="section-container">
+      <div class="section-header">
+        <span class="section-eyebrow" id="bentoEyebrow"></span>
+        <h2 class="section-heading" id="bentoHeading"></h2>
+        <p class="section-subheading" id="bentoSubheading"></p>
+      </div>
+
+      <div class="bento-grid-layout" id="bentoGridContainer"></div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       4. THREE SCROLL-PINNED BLUR-TO-CLEAR FULLSCREEN SECTIONS
+          + APPLEPIC.JPG EDITORIAL & SCROLLABLE BENTO CAROUSELS
+       ======================================================================== -->
+  <div id="immersion-container"></div>
+
+  <!-- ========================================================================
+       5. STANDALONE SCROLL-SCRUBBED HARDWARE SHOWCASE SECTION
+          (Developer-Preset 4-Frame Horizontal Roll — js/hardware-disassembly.js)
+       ======================================================================== -->
+  <section class="hardware-scroll-track" id="hardware-disassembly">
+    <div class="hardware-sticky-viewport">
+      <div class="hw-header-overlay" id="hwHeaderOverlay">
+        <span class="hw-eyebrow" id="hwEyebrow"></span>
+        <h2 class="hw-main-title" id="hwMainTitle"></h2>
+      </div>
+
+      <!-- Draggable 3D product roll canvas -->
+      <canvas id="disassemblyCanvas" aria-label="Drag to roll the product"></canvas>
+
+      <!-- Feature callout that follows the current angle (hidden for angles without info) -->
+      <div class="hw-pin-callout" id="hwPinCallout" aria-live="polite">
+        <strong id="hwPinTitle"></strong>
+        <span id="hwPinDetail"></span>
+      </div>
+
+      <!-- Overall product specification card -->
+      <aside class="hw-milestone-card hw-spec-card" id="hwMilestoneCard">
+        <span class="hw-card-color" id="hwCardColor"></span>
+        <h3 id="hwMilestoneTitle"></h3>
+        <p id="hwMilestoneBody"></p>
+        <div class="hw-milestone-specs" id="hwMilestoneSpecs"></div>
+      </aside>
+
+      <!-- Colour picker -->
+      <div class="hw-roll-dock" id="hwRollDock">
+        <div class="hw-color-picker" id="hwColorPicker" role="radiogroup" aria-label="Choose a finish"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       6. VERTICALLY STACKED ACCORDION SECTION (Customizable Q&A)
+       ======================================================================== -->
+  <section class="accordion-section" id="faq-accordion">
+    <div class="section-container narrow">
+      <div class="section-header">
+        <span class="section-eyebrow" id="faqEyebrow"></span>
+        <h2 class="section-heading" id="faqHeading"></h2>
+        <p class="section-subheading" id="faqSubheading"></p>
+      </div>
+
+      <div class="accordion-stack" id="accordionStack"></div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       7. COMPREHENSIVE FOOTER (Sitemaps, Disclaimers, Copyright, Socials)
+       ======================================================================== -->
+  <footer class="blueprint-footer" id="footer">
+    <div class="footer-container">
+      <p class="footer-disclaimer" id="footerDisclaimer"></p>
+      <hr class="footer-divider" />
+      <div class="footer-sitemap-grid" id="footerSitemap"></div>
+      <hr class="footer-divider" />
+      <div class="footer-bottom-bar">
+        <span class="footer-copyright" id="footerCopyright"></span>
+        <div class="footer-legal-links" id="footerLegalLinks"></div>
+        <div class="footer-social-links" id="footerSocialLinks"></div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Modular Scripts -->
+  <script src="./js/config.js"></script>
+  <script src="./js/logo-pipeline.js"></script>
+  <script src="./js/hero-aurora.js"></script>
+  <script src="./js/scroll-immersion.js"></script>
+  <script src="./js/hardware-disassembly.js"></script>
+</body>
+</html>
